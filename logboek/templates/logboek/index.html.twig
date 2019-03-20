@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Logboek index{% endblock %}
+
+{% block body %}
+    <nav class="site-header sticky-top py-1" style="border-bottom: 1px solid #565656">
+        <div class="container d-flex flex-column flex-md-row justify-content-between">
+            <a class="py-2" href="{{ path("default") }}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="d-block mx-auto"><circle cx="12" cy="12" r="10"></circle><line x1="14.31" y1="8" x2="20.05" y2="17.94"></line><line x1="9.69" y1="8" x2="21.17" y2="8"></line><line x1="7.38" y1="12" x2="13.12" y2="2.06"></line><line x1="9.69" y1="16" x2="3.95" y2="6.06"></line><line x1="14.31" y1="16" x2="2.83" y2="16"></line><line x1="16.62" y1="12" x2="10.88" y2="21.94"></line></svg>
+            </a>
+            <a class="py-2 d-none d-md-inline-block" href="{{ path("default") }}">Home</a>
+            <a class="py-2 d-none d-md-inline-block" href="#"></a>
+            <a class="py-2 d-none d-md-inline-block" href="#"></a>
+            {% if not is_granted('ROLE_USER') %}
+                <a class="py-2 d-none d-md-inline-block" href="{{ path("fos_user_security_login") }}">Inlogen</a>
+                <a class="py-2 d-none d-md-inline-block" href="{{ path("fos_user_registration_register") }}">Register</a>
+            {% else %}
+                <a class="py-2 d-none d-md-inline-block" href="/truck">Trucks</a>
+                <a class="py-2 d-none d-md-inline-block" href="/logboek">Logboek</a>
+                <a class="py-2 d-none d-md-inline-block" href="/logout">Loguit</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <h1>Logboek index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Begeleidingsbrief</th>
+                <th>Datum</th>
+                <th>Aantalm3</th>
+                <th>Laadlocatie</th>
+                <th>Tijdvertrek</th>
+                <th>Bestemming</th>
+                <th>Evenement</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for logboek in logboeks %}
+            <tr>
+                <td>{{ logboek.id }}</td>
+                <td>{{ logboek.begeleidingsbrief }}</td>
+                <td>{{ logboek.datum ? logboek.datum|date('Y-m-d') : '' }}</td>
+                <td>{{ logboek.aantalm3 }}</td>
+                <td>{{ logboek.laadlocatie }}</td>
+                <td>{{ logboek.tijdvertrek ? logboek.tijdvertrek|date('H:i:s') : '' }}</td>
+                <td>{{ logboek.bestemming }}</td>
+                <td>{{ logboek.evenement }}</td>
+                <td>
+                    <a href="{{ path('logboek_show', {'id': logboek.id}) }}">show</a>
+                    <a href="{{ path('logboek_edit', {'id': logboek.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('logboek_new') }}">Create new</a>
+{% endblock %}
